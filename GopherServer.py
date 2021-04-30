@@ -2,6 +2,8 @@
 A simple Gopher server
 '''
 import sys, socket
+import pandas as pd
+import os
 # Specification #
 # - Each line ends with CRLF
 # - Response to empty argument: ls /
@@ -33,12 +35,32 @@ class GopherServer:
             reply = self.construct(parameters)
             clientSock.sendall(reply)
             clientSock.close()
-    def parse(req): #turn string recvd from Client into actionable instructions
-        pass
-        return parameters
-    def construct(): # act on results of decode, turn server state into a string of lines
-
-        return 50#reply
+        print("exiting gopher")
+    def parse(self, req): #turn string recvd from Client into actionable instructions
+        return '.'
+        if req == b'\r\n':
+            with open(os.path.join(path,'links')) as f:
+                content = f.readlines()
+            reply = content
+            return
+        else:
+            print('req:',req)
+        #return parameters 
+    def construct(self, path): # act on results of decode, turn server state into a string of lines
+        rstring = ''
+        if True:
+            link_lines = pd.read_csv(os.path.join('Content',path,'links'), names=['disp_name', 'filename', 'host', 'port'], delimiter='\t')
+            for link in link_lines['disp_name']:
+                rstring += link+'\r\n'
+        elif False:#file:
+            pass
+        elif False:#
+            pass
+        return bytes(link_lines)
+    '''
+    link_lines = pd.read_csv('links', delimiter='\t')
+    
+    '''
 def main():
 
     if len(sys.argv) > 1:
@@ -53,3 +75,5 @@ def main():
     print("Listening on port", str(server.port))
     server.listen()
 
+if __name__ == '__main__':
+    main()
