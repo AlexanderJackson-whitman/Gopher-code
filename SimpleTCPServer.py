@@ -30,6 +30,7 @@ def main():
             server = TCPServer(int(sys.argv[1]))
         except ValueError as e:
             print("Error in specifying port. Creating server on default port.")
+            
             server = TCPServer()
     else:
         server = TCPServer()
