@@ -2,6 +2,7 @@
 A simple Gopher server
 '''
 import sys, socket
+import re
 import pandas as pd
 import os
 # Specification #
@@ -46,21 +47,20 @@ class GopherServer:
         else:
             print('req:',req)
         #return parameters 
-    def construct(self, path): # act on results of decode, turn server state into a string of lines
+
+    def construct(self, path, ): # act on results of decode, turn server state into a string of lines
         rstring = ''
+        link_lines = pd.read_csv(os.path.join('Content',path,'links'), names=['disp_name', 'filename', 'host', 'port'], delimiter='\t')
         if True:
-            link_lines = pd.read_csv(os.path.join('Content',path,'links'), names=['disp_name', 'filename', 'host', 'port'], delimiter='\t')
-            for link in link_lines['disp_name']:
-                rstring += link+'\r\n'
+            rstring = re.sub(' +', '\t', re.sub('\n +', '\r\n', link_lines.to_string(index=False, header=False)))
+            breakpoint()
+            rstring += '.'
         elif False:#file:
             pass
         elif False:#
             pass
         return bytes(rstring,'utf8')
-    '''
-    link_lines = pd.read_csv('links', delimiter='\t')
-    
-    '''
+
 def main():
 
     if len(sys.argv) > 1:
