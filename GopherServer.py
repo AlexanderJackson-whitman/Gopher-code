@@ -56,7 +56,7 @@ class GopherServer:
             pass
         elif False:#
             pass
-        return bytes(link_lines)
+        return bytes(rstring,'utf8')
     '''
     link_lines = pd.read_csv('links', delimiter='\t')
     
