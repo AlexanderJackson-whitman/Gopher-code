@@ -4,7 +4,7 @@ A simple "echo" client written in Python.
 import sys, socket
 
 def usage():
-    print("Usage:  python3 SimpleTCPClient <server IP> <port number> <message>")
+    print("Usage:  python3 SimpleGopherClient <server IP> <port number> <message>")
     sys.exit()
 
 def main():

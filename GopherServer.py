@@ -17,8 +17,10 @@ import os
 #   #2 denote the domain-name of the host that has the do
 #   #3 port on which to connect
 #   #4+ ignore
-#  CR LF denotes end of line
+#  CR LF (\r\n) denotes end of line
 
+#Open with 'lynx gopher://localhost:5000' (or 'telnet localhost 50000', or
+# 'python3 SimpleGopherServer.py' localhost 50000' for simple operations.)
 class GopherServer:
     def __init__(self, port=50000):
         self.port = port
@@ -38,28 +40,29 @@ class GopherServer:
             clientSock.close()
         print("exiting gopher")
     def parse(self, req): #turn string recvd from Client into actionable instructions
-        return '.'
+        path = ''
         if req == b'\r\n':
-            with open(os.path.join(path,'links')) as f:
-                content = f.readlines()
-            reply = content
-            return
+            path = '.'
         else:
             print('req:',req)
-        #return parameters 
+            #req=req.decode()
+            path = req.decode('utf8').replace('\r\n','')
+        return path 
 
-    def construct(self, path, ): # act on results of decode, turn server state into a string of lines
+    def construct(self, path): # act on results of decode, turn server state into a string of lines
         rstring = ''
-        link_lines = pd.read_csv(os.path.join('Content',path,'links'), names=['disp_name', 'filename', 'host', 'port'], delimiter='\t')
-        if True:
-            rstring = re.sub(' +', '\t', re.sub('\n +', '\r\n', link_lines.to_string(index=False, header=False)))
-            breakpoint()
-            rstring += '.'
-        elif False:#file:
-            pass
-        elif False:#
-            pass
-        return bytes(rstring,'utf8')
+        if path == '.' or path[-1] == '/' or path == '/': #directory
+            # link_lines = pd.read_csv(os.path.join('Content',path,'links'), names=['disp_name', 'filename', 'host', 'port'], delimiter='\t')
+            # rstring = re.sub(' +', '\t', re.sub('\n +', '\r\n', link_lines.to_string(index=False, header=False)))
+            with open(os.path.join('Content',path,'links'), 'r') as link_file:
+                links = link_file.read()
+            rstring = links.replace('\n', '\r\n')
+        else:
+            #file
+            with open(os.path.join('Content', path), 'r') as txt_file:
+                rstring = txt_file.read()
+
+        return bytes(rstring+'.','utf8')
 
 def main():
 

@@ -1,2 +1,3 @@
-@quote1	quote1.txt	localhost	50000
-@quote2	quote2.txt	localhost	50000
+0quote1	Quotes/quote1.txt	localhost	50000
+0quote2	Quotes/quote2.txt	localhost	50000
+0quote3	Quotes/quote3.txt	localhost	50000
